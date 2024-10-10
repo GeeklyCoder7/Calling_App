@@ -11,8 +11,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.callingapp.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
+    FirebaseAuth auth;
+    FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,12 +30,20 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        //Initializing variables
+        auth = FirebaseAuth.getInstance();
+        currentUser = auth.getCurrentUser();
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(MainActivity.this, SignUpActivity.class));
+                if (currentUser != null) {
+                    startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                } else {
+                    startActivity(new Intent(MainActivity.this, SignUpActivity.class));
+                }
                 finish();
             }
-        }, 1000);
+        }, 1500);
     }
 }
